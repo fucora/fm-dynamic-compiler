@@ -1,4 +1,4 @@
-package com.fm.data.trade.dynamic.java;
+package com.fm.compiler.dynamic.java;
 
 import org.apache.commons.io.IOUtils;
 

@@ -1,4 +1,4 @@
-package com.fm.data.trade.dynamic;
+package com.fm.compiler.dynamic;
 
 import java.io.File;
 

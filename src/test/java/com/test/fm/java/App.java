@@ -31,7 +31,7 @@ public class App {
 //                "\t}\n" +
 //                "}";
 
-        String code = "import com.fm.data.trade.dynamic.OApiTransformer;\n" +
+        String code = "import OApiTransformer;\n" +
                 "public class OApiTransformerA extends OApiTransformer {\n" +
                 "\tpublic void hello(){\n" +
                 "\t\tSystem.out.println(sd());\n" +

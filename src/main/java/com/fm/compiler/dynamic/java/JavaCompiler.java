@@ -1,8 +1,7 @@
-package com.fm.data.trade.dynamic.java;
+package com.fm.compiler.dynamic.java;
 
-import com.fm.data.trade.dynamic.DynamicCodeCompiler;
-import com.fm.data.trade.dynamic.exceptions.CompilerException;
-import org.apache.commons.io.FileUtils;
+import com.fm.compiler.dynamic.exceptions.CompilerException;
+import com.fm.compiler.dynamic.DynamicCodeCompiler;
 import org.apache.commons.io.IOUtils;
 
 import javax.tools.*;

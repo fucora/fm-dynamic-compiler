@@ -1,4 +1,4 @@
-package com.fm.data.trade.dynamic.exceptions;
+package com.fm.compiler.dynamic.exceptions;
 
 
 public class CompilerException extends Exception {

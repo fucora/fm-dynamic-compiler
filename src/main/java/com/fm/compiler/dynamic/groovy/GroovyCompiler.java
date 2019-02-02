@@ -1,6 +1,6 @@
-package com.fm.data.trade.dynamic.groovy;
+package com.fm.compiler.dynamic.groovy;
 
-import com.fm.data.trade.dynamic.DynamicCodeCompiler;
+import com.fm.compiler.dynamic.DynamicCodeCompiler;
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyObject;
 import org.junit.Test;

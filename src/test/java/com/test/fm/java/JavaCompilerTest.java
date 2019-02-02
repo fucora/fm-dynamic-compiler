@@ -1,9 +1,6 @@
 package com.test.fm.java;
 
-import com.fm.data.trade.dynamic.java.DynaicCompilerContext;
-import com.fm.data.trade.dynamic.java.JavaCompiler;
-import com.fm.data.trade.dynamic.java.JavaFileObjectManager;
-import com.fm.data.trade.dynamic.java.MemJavaFileObjectManager;
+import com.fm.compiler.dynamic.java.*;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -33,7 +30,7 @@ public class JavaCompilerTest {
     public void test1() throws Exception {
         System.out.println("start test1...");
 
-        String code = "import com.fm.data.trade.dynamic.OApiTransformer;\n" +
+        String code = "import OApiTransformer;\n" +
                 "public class OApiTransformerA extends OApiTransformer {\n" +
                 "\tpublic void hello(){\n" +
                 "\t\tSystem.out.println(sd());\n" +
@@ -71,6 +68,21 @@ public class JavaCompilerTest {
         method.invoke(obj);
         System.out.println("... end test3");
     }
+
+
+    @Test
+    public void test4() throws Exception {
+        System.out.println("start test4...");
+        JavaFileObjectManager javaFileObjectManager = new StoreJavaFileObjectManager(
+                new File("/Users/chinadep/IdeaProjects/fm-dynamic-compiler"));
+        ClassLoader cl = new DynamicClassLoader(javaFileObjectManager);
+        Class cls = cl.loadClass("Tes");
+        Object obj = cls.newInstance();
+        Method method = cls.getMethod("hello");
+        method.invoke(obj);
+        System.out.println("... end test4");
+    }
+
 
 
     @AfterClass
