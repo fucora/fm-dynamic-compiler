@@ -1,6 +1,7 @@
 package com.test.fm.java;
 
 import com.fm.compiler.dynamic.java.*;
+import com.github.benmanes.caffeine.cache.Cache;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -30,7 +31,7 @@ public class JavaCompilerTest {
     public void test1() throws Exception {
         System.out.println("start test1...");
 
-        String code = "import OApiTransformer;\n" +
+        String code = "import com.fm.data.trade.dynamic.OApiTransformer;\n" +
                 "public class OApiTransformerA extends OApiTransformer {\n" +
                 "\tpublic void hello(){\n" +
                 "\t\tSystem.out.println(sd());\n" +
@@ -89,7 +90,8 @@ public class JavaCompilerTest {
     public static void after() throws Exception{
         Field field = MemJavaFileObjectManager.class.getDeclaredField("fileObjects");
         field.setAccessible(true);
-        Map map = (Map) field.get(javaFileObjectManager);
+        Cache cache = (Cache) field.get(javaFileObjectManager);
+        Map map =cache.asMap();
         System.out.println(map);
     }
 }

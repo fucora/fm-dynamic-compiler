@@ -1,15 +1,26 @@
 package com.fm.compiler.dynamic.java;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
+
 import javax.tools.JavaFileObject;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 public class MemJavaFileObjectManager implements JavaFileObjectManager {
-    private Map<String, JavaFileObject> fileObjects = new ConcurrentHashMap<>();
+    private Cache<String, JavaFileObject> fileObjects;
+
+    public MemJavaFileObjectManager() {
+        fileObjects = Caffeine.newBuilder()
+                .expireAfterAccess(5, TimeUnit.MINUTES)
+                .build();
+    }
 
     @Override
     public JavaFileObject getJavaFileObject(String name) {
-        return fileObjects.get(name);
+        return fileObjects.getIfPresent(name);
     }
 
     @Override
@@ -23,7 +34,7 @@ public class MemJavaFileObjectManager implements JavaFileObjectManager {
     }
 
 
-    public void clear() {
-        fileObjects.clear();
+    public void cleanUp() {
+        fileObjects.cleanUp();
     }
 }
