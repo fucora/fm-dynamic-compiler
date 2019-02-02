@@ -20,6 +20,11 @@ public class JavaCompiler implements DynamicCodeCompiler {
         this.compilerContext = compilerContext;
     }
 
+
+    public JavaCompiler() {
+        this(DynaicCompilerContext.createContext(new MemJavaFileObjectManager()));
+    }
+
     @Override
     public Class compile(String sCode, String sName) throws Exception {
         JavaFileObject javaFileObject = new JavaObject(sName, sCode);

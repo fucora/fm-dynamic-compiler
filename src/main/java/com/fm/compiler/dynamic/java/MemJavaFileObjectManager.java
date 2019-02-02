@@ -21,4 +21,9 @@ public class MemJavaFileObjectManager implements JavaFileObjectManager {
     public void loadJavaFileObject(JavaFileObject javaFileObject) {
 
     }
+
+
+    public void clear() {
+        fileObjects.clear();
+    }
 }
