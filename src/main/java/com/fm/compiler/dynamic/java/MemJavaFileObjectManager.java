@@ -14,6 +14,7 @@ public class MemJavaFileObjectManager implements JavaFileObjectManager {
 
     public MemJavaFileObjectManager() {
         fileObjects = Caffeine.newBuilder()
+                .maximumSize(50)
                 .expireAfterAccess(5, TimeUnit.MINUTES)
                 .build();
     }
