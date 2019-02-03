@@ -32,16 +32,4 @@ public class StoreJavaFileObjectManager implements JavaFileObjectManager {
 
     }
 
-    @Override
-    public void loadJavaFileObject(JavaFileObject javaFileObject) {
-
-    }
-
-    public void loadJavaFileObject(String name, JavaFileObject javaFileObject) throws IOException {
-        if (javaFileObject instanceof JavaObject) {
-            JavaObject javaObject = (JavaObject) javaFileObject;
-            File file = new File(dir, name + JavaFileObject.Kind.CLASS.extension);
-            FileUtils.writeByteArrayToFile(file, javaObject.getCompiledBytes());
-        }
-    }
 }

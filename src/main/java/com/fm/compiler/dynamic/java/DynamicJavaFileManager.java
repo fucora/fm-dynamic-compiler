@@ -27,7 +27,7 @@ public class DynamicJavaFileManager extends ForwardingJavaFileManager<JavaFileMa
     @Override
     public JavaFileObject getJavaFileForOutput(Location location, String qualifiedClassName, JavaFileObject.Kind kind, FileObject sibling) throws IOException {
         JavaFileObject javaFileObject = new JavaObject(qualifiedClassName, kind);
-        javaFileObjectManager.putLoadJavaFileObject(qualifiedClassName, javaFileObject);
+        javaFileObjectManager.putJavaFileObject(qualifiedClassName, javaFileObject);
         return javaFileObject;
     }
 

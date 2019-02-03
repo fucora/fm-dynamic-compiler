@@ -29,12 +29,6 @@ public class MemJavaFileObjectManager implements JavaFileObjectManager {
         fileObjects.put(name, javaFileObject);
     }
 
-    @Override
-    public void loadJavaFileObject(JavaFileObject javaFileObject) {
-
-    }
-
-
     public void cleanUp() {
         fileObjects.cleanUp();
     }

@@ -1,5 +1,6 @@
 package com.fm.compiler.dynamic.java;
 
+import com.fm.compiler.utils.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import javax.tools.JavaFileObject;
@@ -15,6 +16,7 @@ public class JavaObject extends SimpleJavaFileObject {
     private String source;
     private ByteArrayOutputStream outPutStream;
     private String charset;
+    private String javaName;
 
 
     /**
@@ -32,11 +34,13 @@ public class JavaObject extends SimpleJavaFileObject {
     public JavaObject(String name, String content) {
         super(URI.create("String:///" + name + JavaFileObject.Kind.SOURCE.extension), JavaFileObject.Kind.SOURCE);
         this.source = content;
+        this.javaName = name;
     }
 
     public JavaObject(String name, Kind kind) {
         super(URI.create("String:///" + name + kind.extension), kind);
         source = null;
+        this.javaName = name;
     }
 
 
@@ -47,6 +51,7 @@ public class JavaObject extends SimpleJavaFileObject {
     public JavaObject(File file, String charset, Kind kind) {
         super(file.toURI(), kind);
         this.charset = charset;
+        this.javaName = FileUtils.getNameByIgnoreSuffix(file);
     }
 
 
@@ -74,4 +79,7 @@ public class JavaObject extends SimpleJavaFileObject {
     }
 
 
+    public String getJavaName() {
+        return javaName;
+    }
 }

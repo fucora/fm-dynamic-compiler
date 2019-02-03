@@ -47,6 +47,16 @@ public class JavaCompiler implements DynamicCodeCompiler {
         throw new CompilerException("尚未支持编译该类型的文件");
     }
 
+    @Override
+    public ClassLoader getClassLoader() {
+        return compilerContext.getClassLoader();
+    }
+
+    @Override
+    public Class loadClass(String name) throws ClassNotFoundException {
+        return getClassLoader().loadClass(name);
+    }
+
     private static List<String> options = new ArrayList<>();
 
     static {
