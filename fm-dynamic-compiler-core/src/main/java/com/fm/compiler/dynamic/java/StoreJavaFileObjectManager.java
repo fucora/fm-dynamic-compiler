@@ -14,10 +14,10 @@ public class StoreJavaFileObjectManager extends MemJavaFileObjectManager {
 
     private static final Logger log = LoggerFactory.getLogger(StoreJavaFileObjectManager.class);
 
-    private File dir;
+    private File targetDir;
 
-    public StoreJavaFileObjectManager(File dir) {
-        this.dir = dir;
+    public StoreJavaFileObjectManager(File targetDir) {
+        this.targetDir = targetDir;
     }
 
     @Override
@@ -27,7 +27,7 @@ public class StoreJavaFileObjectManager extends MemJavaFileObjectManager {
             return javaFileObject;
         }
 
-        File file = new File(dir, name + JavaFileObject.Kind.CLASS.extension);
+        File file = new File(targetDir, name + JavaFileObject.Kind.CLASS.extension);
         if (file.exists()) {
             javaFileObject = new JavaObject(file, JavaFileObject.Kind.CLASS);
             try {
@@ -45,7 +45,7 @@ public class StoreJavaFileObjectManager extends MemJavaFileObjectManager {
     public void cleanUp() {
         super.cleanUp();
         try {
-            FileUtils.cleanDirectory(dir);
+            FileUtils.cleanDirectory(targetDir);
         } catch (IOException e) {
             log.error("", e);
             throw new RuntimeException(e);
@@ -63,7 +63,7 @@ public class StoreJavaFileObjectManager extends MemJavaFileObjectManager {
 
 
     private void outputCompiledClassContent(JavaObject javaObject) {
-        File file = new File(dir, javaObject.getJavaName() + JavaFileObject.Kind.CLASS.extension);
+        File file = new File(targetDir, javaObject.getJavaName() + JavaFileObject.Kind.CLASS.extension);
         try {
             FileUtils.writeByteArrayToFile(file, javaObject.getCompiledBytes());
         } catch (IOException e) {

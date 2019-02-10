@@ -5,7 +5,6 @@ import com.github.benmanes.caffeine.cache.Cache;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
-import sun.reflect.misc.MethodUtil;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -55,7 +54,7 @@ public class JavaCompilerTest {
     @Test
     public void test2() throws Exception {
         System.out.println("start test2...");
-        Class cls = javaCompiler.compile(new File("/Users/saleson/IdeaProjects/fm-dynamic-compiler/Tes.java"));
+        Class cls = javaCompiler.compile(new File("/Users/saleson/IdeaProjects/fm-dynamic-compiler/fm-dynamic-compiler-examples/src/test/resources/sources/java/Tes.java"));
         Object obj = cls.newInstance();
         Method method = cls.getMethod("hello");
         method.invoke(obj);
@@ -81,10 +80,11 @@ public class JavaCompilerTest {
     @Test
     public void test4() throws Exception {
         System.out.println("start test4...");
-        File dir = new File("/Users/saleson/IdeaProjects/fm-dynamic-compiler");
-        JavaFileObjectManager javaFileObjectManager = new StoreJavaFileObjectManager(dir);
+        File sdir = new File("/Users/saleson/IdeaProjects/fm-dynamic-compiler/fm-dynamic-compiler-examples/src/test/resources/sources/java");
+        File tdir = new File("/Users/saleson/IdeaProjects/fm-dynamic-compiler/fm-dynamic-compiler-examples/src/test/resources/target/java");
+        JavaFileObjectManager javaFileObjectManager = new StoreJavaFileObjectManager(tdir);
         JavaCompiler javaCompiler = new JavaCompiler(DynaicCompilerContext.createContext(javaFileObjectManager));
-        Class cls = javaCompiler.compile(new File(dir, "Tes.java"));
+        Class cls = javaCompiler.compile(new File(sdir, "Tes.java"));
         Object obj = cls.newInstance();
         Method method = cls.getMethod("hello");
         method.invoke(obj);
@@ -98,10 +98,10 @@ public class JavaCompilerTest {
     @Test
     public void test5() throws Exception {
         System.out.println("start test4...");
-        File dir = new File("/Users/saleson/IdeaProjects/fm-dynamic-compiler");
+        File dir = new File("/Users/saleson/IdeaProjects/fm-dynamic-compiler/fm-dynamic-compiler-examples/src/test/resources/target/java");
         JavaFileObjectManager javaFileObjectManager = new StoreJavaFileObjectManager(dir);
         JavaCompiler javaCompiler = new JavaCompiler(DynaicCompilerContext.createContext(javaFileObjectManager));
-        Class cls = javaCompiler.loadClass("test");
+        Class cls = javaCompiler.loadClass("Tes");
         Object obj = cls.newInstance();
         Method method = cls.getMethod("hello");
         method.invoke(obj);
