@@ -6,6 +6,8 @@ import org.apache.commons.io.IOUtils;
 
 import javax.tools.*;
 import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,6 +20,7 @@ public class JavaCompiler implements DynamicCodeCompiler {
 
     public JavaCompiler(DynaicCompilerContext compilerContext) {
         this.compilerContext = compilerContext;
+        initCompilerOptions();
     }
 
 
@@ -57,11 +60,22 @@ public class JavaCompiler implements DynamicCodeCompiler {
         return getClassLoader().loadClass(name);
     }
 
-    private static List<String> options = new ArrayList<>();
+    private List<String> options = new ArrayList<>();
 
-    static {
+
+    private void initCompilerOptions() {
         options.add("-target");
         options.add("1.8");
+        options.add("-classpath");
+        StringBuilder sb = new StringBuilder();
+        URLClassLoader urlClassLoader = (URLClassLoader) compilerContext.getClassLoader().getParent();
+        if (urlClassLoader == null) {
+            urlClassLoader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
+        }
+        for (URL url : urlClassLoader.getURLs()) {
+            sb.append(url.getFile()).append(File.pathSeparator);
+        }
+        options.add(sb.toString());
     }
 
 
@@ -70,6 +84,8 @@ public class JavaCompiler implements DynamicCodeCompiler {
         try {
             javax.tools.JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
             DiagnosticCollector<JavaFileObject> collector = new DiagnosticCollector<>();
+
+
             Boolean result = compiler.getTask(null, compilerContext.getJavaFileManager(), collector, options, null, Arrays.asList(javaFileObject)).call();
             if (!result) {
                 StringBuffer sb = new StringBuffer();

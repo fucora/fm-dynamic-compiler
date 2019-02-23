@@ -14,8 +14,10 @@ public class DynamicClassLoader extends ClassLoader {
     }
 
     public DynamicClassLoader(JavaFileObjectManager manager) {
-        this.manager = manager;
+        this(manager, Thread.currentThread().getContextClassLoader());
     }
+
+
 
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
@@ -25,7 +27,11 @@ public class DynamicClassLoader extends ClassLoader {
             return defineClass(name, bytes, 0, bytes.length);
         }
         try {
-            return ClassLoader.getSystemClassLoader().loadClass(name);
+            if(getParent()!=null){
+                return getParent().loadClass(name);
+            }else{
+                return ClassLoader.getSystemClassLoader().loadClass(name);
+            }
         } catch (Exception e) {
             return super.findClass(name);
         }
