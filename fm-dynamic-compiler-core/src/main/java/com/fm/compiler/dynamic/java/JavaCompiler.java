@@ -68,14 +68,31 @@ public class JavaCompiler implements DynamicCodeCompiler {
         options.add("1.8");
         options.add("-classpath");
         StringBuilder sb = new StringBuilder();
-        URLClassLoader urlClassLoader = (URLClassLoader) compilerContext.getClassLoader().getParent();
-        if (urlClassLoader == null) {
-            urlClassLoader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
-        }
-        for (URL url : urlClassLoader.getURLs()) {
+//        URLClassLoader urlClassLoader = (URLClassLoader) compilerContext.getClassLoader().getParent();
+//        if (urlClassLoader == null) {
+//            urlClassLoader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
+//        }
+//        for (URL url : urlClassLoader.getURLs()) {
+        for(URL url : loadClassLoaderUrls()){
             sb.append(url.getFile()).append(File.pathSeparator);
         }
         options.add(sb.toString());
+    }
+
+    private List<URL> loadClassLoaderUrls(){
+        List<URL> urls = new ArrayList<>();
+        ClassLoader classLoader = compilerContext.getClassLoader();
+        while (classLoader!=null){
+            if(classLoader instanceof URLClassLoader){
+                URLClassLoader urlClassLoader = (URLClassLoader)classLoader;
+                for (URL url : urlClassLoader.getURLs()) {
+                    urls.add(url);
+                }
+            }
+            classLoader = classLoader.getParent();
+        }
+
+        return urls;
     }
 
 

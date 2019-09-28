@@ -2,11 +2,12 @@ package com.fm.compiler;
 
 import com.fm.compiler.dynamicbean.Instancer;
 import com.fm.compiler.dynamicbean.InstanceCreater;
+import com.fm.compiler.dynamicbean.SimpleInstanceCreater;
 import com.fm.compiler.dynamicbean.SimpleInstancer;
 
 public class InstanceHelper {
 
-    static InstanceCreater instanceCreater;
+    static InstanceCreater instanceCreater = new SimpleInstanceCreater();
 
 
     public static InstanceCreater getInstanceCreater() {

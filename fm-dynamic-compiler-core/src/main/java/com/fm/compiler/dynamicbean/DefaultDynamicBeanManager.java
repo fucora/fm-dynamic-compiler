@@ -1,5 +1,6 @@
 package com.fm.compiler.dynamicbean;
 
+import com.fm.compiler.CompilerHelper;
 import com.fm.compiler.DynamicCompilerHelper;
 import com.fm.compiler.InstanceHelper;
 import com.fm.compiler.exceptions.InstanceCreateException;
@@ -57,6 +58,7 @@ public class DefaultDynamicBeanManager implements DynamicBeanManager {
 
 
     private Class<?> compile(CompliteDefinition compliteDefinition) throws Exception {
+//        return CompilerHelper.newJavaCompiler().compile(compliteDefinition.getLanguage(), compliteDefinition.getName(), compliteDefinition.getCode());
         return DynamicCompilerHelper.compile(
                 compliteDefinition.getLanguage(), compliteDefinition.getName(), compliteDefinition.getCode());
     }
