@@ -6,9 +6,13 @@ public class DynaicCompilerContext {
 
 
     public static DynaicCompilerContext createContext(JavaFileObjectManager javaObjectManager) {
+        return createContext(javaObjectManager, Thread.currentThread().getContextClassLoader());
+    }
+
+    public static DynaicCompilerContext createContext(JavaFileObjectManager javaObjectManager, ClassLoader classLoader) {
         DynaicCompilerContext compilerContext = new DynaicCompilerContext();
         compilerContext.setJavaObjectManager(javaObjectManager);
-        compilerContext.setClassLoader(new DynamicClassLoader(javaObjectManager));
+        compilerContext.setClassLoader(new DynamicClassLoader(javaObjectManager, classLoader));
         compilerContext.setJavaFileManager(
                 new DynamicJavaFileManager(
                         ToolProvider.getSystemJavaCompiler().getStandardFileManager(

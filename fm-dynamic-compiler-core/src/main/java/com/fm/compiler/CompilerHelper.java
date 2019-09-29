@@ -4,22 +4,38 @@ import com.fm.compiler.dynamic.DynamicCodeCompiler;
 import com.fm.compiler.dynamic.groovy.GroovyCompiler;
 import com.fm.compiler.dynamic.java.DynaicCompilerContext;
 import com.fm.compiler.dynamic.java.JavaCompiler;
+import com.fm.compiler.dynamic.java.MemJavaFileObjectManager;
 import com.fm.compiler.dynamic.java.StoreJavaFileObjectManager;
 import org.apache.commons.io.FileUtils;
 import org.codehaus.groovy.control.CompilerConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class CompilerHelper {
 
+
+    private static AtomicReference<ClassLoader> javaCompilerClassLoader = new AtomicReference<>();
+
+
     public static DynamicCodeCompiler newJavaCompiler() {
-        return new JavaCompiler();
+        ClassLoader classLoader = getJavaCompilerClassLoader();
+        if(Objects.isNull(classLoader)){
+            return new JavaCompiler();
+        }
+        return new JavaCompiler(DynaicCompilerContext.createContext(new MemJavaFileObjectManager(), classLoader));
     }
 
     public static DynamicCodeCompiler storeJavaCompiler(File classpath) {
+        ClassLoader classLoader = getJavaCompilerClassLoader();
+        if(Objects.isNull(classLoader)){
+            return new JavaCompiler(DynaicCompilerContext.createContext(
+                    new StoreJavaFileObjectManager(classpath)));
+        }
         return new JavaCompiler(DynaicCompilerContext.createContext(
-                new StoreJavaFileObjectManager(classpath)));
+                new StoreJavaFileObjectManager(classpath), classLoader));
     }
 
     public static DynamicCodeCompiler newGroovyCompiler(){
@@ -40,6 +56,15 @@ public class CompilerHelper {
         });
         compilerConfiguration.setClasspath(classPath);
         return new GroovyCompiler();
+    }
+
+
+    public static ClassLoader getJavaCompilerClassLoader(){
+        return javaCompilerClassLoader.get();
+    }
+
+    public static void registerJavaCompilerClassLoader(ClassLoader classLoader){
+        javaCompilerClassLoader.set(classLoader);
     }
 
 }
