@@ -13,6 +13,11 @@ import java.net.URI;
 
 public class JavaObject extends SimpleJavaFileObject {
 
+    private static final char PKG_SEPARATOR = '.';
+    private static final char DIR_SEPARATOR = '/';
+    private static final String CLASS_FILE_SUFFIX = ".class";
+    private static final String JAVA_FILE_SUFFIX = ".java";
+
     private String source;
     private ByteArrayOutputStream outPutStream;
     private String charset;
@@ -51,9 +56,36 @@ public class JavaObject extends SimpleJavaFileObject {
     public JavaObject(File file, String charset, Kind kind) {
         super(file.toURI(), kind);
         this.charset = charset;
-        this.javaName = FileUtils.getNameByIgnoreSuffix(file);
+
+        String className = file.toURI().getPath();
+        className = className.replace(DIR_SEPARATOR, PKG_SEPARATOR);
+        className = className.substring(1, className.indexOf(CLASS_FILE_SUFFIX));
+        className = className.substring(1, className.indexOf(JAVA_FILE_SUFFIX));
+        this.javaName = className;
     }
 
+
+    public JavaObject(String name, File file, String charset, Kind kind) {
+        super(file.toURI(), kind);
+        this.charset = charset;
+        this.javaName = name;
+    }
+
+    public static JavaObject ofFile(File file){
+        return ofFile(file, "utf-8");
+    }
+    public static JavaObject ofFile(File file, String charset){
+        String className = file.toURI().getPath();
+        className = className.replace(DIR_SEPARATOR, PKG_SEPARATOR);
+        if(file.getName().endsWith(JAVA_FILE_SUFFIX)){
+            className = className.substring(1, className.indexOf(JAVA_FILE_SUFFIX));
+            return new JavaObject(className, file, charset, Kind.SOURCE);
+        }else if(file.getName().endsWith(CLASS_FILE_SUFFIX)){
+            className = className.substring(1, className.indexOf(CLASS_FILE_SUFFIX));
+            return new JavaObject(className, file, charset, Kind.CLASS);
+        }
+        throw new UnsupportedOperationException();
+    }
 
     @Override
     public CharSequence getCharContent(boolean ignoreEncodingErrors) throws IOException {

@@ -61,8 +61,8 @@ public class DefaultDynamicBeanManager implements DynamicBeanManager {
 //        return CompilerHelper.newJavaCompiler().compile(compliteDefinition.getLanguage(), compliteDefinition.getName(), compliteDefinition.getCode());
         Class<?> cls = DynamicCompilerHelper.compile(
                 compliteDefinition.getLanguage(), compliteDefinition.getName(), compliteDefinition.getCode());
-        if(!Objects.isNull(cls)){
-            log.info("[dynamic compiler] {} 编译成功 -> {}", compliteDefinition.getName(), cls);
+        if (!Objects.isNull(cls)) {
+            log.info("[dynamic compiler - {}] {} 编译成功 -> {}", compliteDefinition.getLanguage(), compliteDefinition.getName(), cls);
         }
         return cls;
     }

@@ -1,58 +1,51 @@
 package com.fm.compiler.dynamic.java;
 
-import com.fm.compiler.dynamic.exceptions.CompilerException;
 import com.fm.compiler.dynamic.DynamicCodeCompiler;
-import org.apache.commons.io.IOUtils;
-
-import javax.tools.*;
+import com.taobao.arthas.compiler.DynamicCompiler;
 import java.io.File;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
 
 public class JavaCompiler implements DynamicCodeCompiler {
 
 
-    private DynaicCompilerContext compilerContext;
+    private ClassLoader classLoader;
+    private com.taobao.arthas.compiler.DynamicCompiler dynamicCompiler;
 
 
-    public JavaCompiler(DynaicCompilerContext compilerContext) {
-        this.compilerContext = compilerContext;
-        initCompilerOptions();
+
+
+    public JavaCompiler(){
+        this(Thread.currentThread().getContextClassLoader());
     }
 
-
-    public JavaCompiler() {
-        this(DynaicCompilerContext.createContext(new MemJavaFileObjectManager()));
-    }
-
-    @Override
-    public Class compile(String sCode, String sName) throws Exception {
-        JavaObject javaFileObject = new JavaObject(sName, sCode);
-        return compile(sName, javaFileObject);
+    public JavaCompiler(ClassLoader classLoader) {
+        this.classLoader = classLoader;
+        this.dynamicCompiler = new DynamicCompiler(getClassLoader());
     }
 
     @Override
-    public Class compile(File file) throws Exception {
-        if (file.getName().endsWith(JavaFileObject.Kind.SOURCE.extension)) {
-            JavaObject javaFileObject = new JavaObject(file, JavaFileObject.Kind.SOURCE);
-            return compile(getJavaName(file), javaFileObject);
-        } else if (file.getName().endsWith(JavaFileObject.Kind.CLASS.extension)) {
-            String name = getJavaName(file);
-            JavaFileObject javaFileObject = new JavaObject(file, JavaFileObject.Kind.CLASS);
-            javaFileObject.openOutputStream().write(IOUtils.toByteArray(javaFileObject.toUri()));
-            compilerContext.getJavaObjectManager().putJavaFileObject(name, javaFileObject);
-            return compilerContext.getClassLoader().loadClass(name);
-        }
-
-        throw new CompilerException("尚未支持编译该类型的文件");
+    public Class compile(String sCode, String sName) {
+//        StringSource javaFileObject = new StringSource(sName, sCode);
+        return compile(new JavaObject(sName, sCode));
     }
+
+    @Override
+    public Class compile(File file) {
+        return compile(JavaObject.ofFile(file));
+    }
+
+    public Class compile(JavaObject javaObject){
+        dynamicCompiler.addSource(javaObject);
+        Map<String, Class<?>> map = dynamicCompiler.build();
+        return map.get(javaObject.getJavaName());
+    }
+
+
+
 
     @Override
     public ClassLoader getClassLoader() {
-        return compilerContext.getClassLoader();
+        return classLoader;
     }
 
     @Override
@@ -60,82 +53,4 @@ public class JavaCompiler implements DynamicCodeCompiler {
         return getClassLoader().loadClass(name);
     }
 
-    private List<String> options = new ArrayList<>();
-
-
-    private void initCompilerOptions() {
-        options.add("-target");
-        options.add("1.8");
-        options.add("-classpath");
-        StringBuilder sb = new StringBuilder();
-//        URLClassLoader urlClassLoader = (URLClassLoader) compilerContext.getClassLoader().getParent();
-//        if (urlClassLoader == null) {
-//            urlClassLoader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
-//        }
-//        for (URL url : urlClassLoader.getURLs()) {
-        for(URL url : loadClassLoaderUrls()){
-            sb.append(url.getFile()).append(File.pathSeparator);
-        }
-        options.add(sb.toString());
-    }
-
-    private List<URL> loadClassLoaderUrls(){
-        List<URL> urls = new ArrayList<>();
-        ClassLoader classLoader = compilerContext.getClassLoader();
-        while (classLoader!=null){
-            if(classLoader instanceof URLClassLoader){
-                URLClassLoader urlClassLoader = (URLClassLoader)classLoader;
-                for (URL url : urlClassLoader.getURLs()) {
-                    urls.add(url);
-                }
-            }
-            classLoader = classLoader.getParent();
-        }
-
-        return urls;
-    }
-
-
-    private Class compile(String name, JavaObject javaFileObject) throws CompilerException, ClassNotFoundException {
-        CompileContext.initCurrentCompileContext();
-        try {
-            javax.tools.JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-            DiagnosticCollector<JavaFileObject> collector = new DiagnosticCollector<>();
-
-
-            Boolean result = compiler.getTask(null, compilerContext.getJavaFileManager(), collector, options, null, Arrays.asList(javaFileObject)).call();
-            if (!result) {
-                StringBuffer sb = new StringBuffer();
-                for (Diagnostic diagnostic : collector.getDiagnostics()) {
-                    compilePrint(diagnostic, sb);
-                    sb.append("\n");
-                }
-                throw new CompilerException(sb.toString());
-            }
-            compilerContext.getJavaObjectManager().compiledJavaObjectHook(javaFileObject);
-            return compilerContext.getClassLoader().loadClass(name);
-        } finally {
-            CompileContext.removeCurrentCompileContext();
-        }
-    }
-
-
-    private static void compilePrint(Diagnostic diagnostic, StringBuffer res) {
-        res.append("Code:[" + diagnostic.getCode() + "]\n");
-        res.append("Kind:[" + diagnostic.getKind() + "]\n");
-        res.append("Position:[" + diagnostic.getPosition() + "]\n");
-        res.append("Start Position:[" + diagnostic.getStartPosition() + "]\n");
-        res.append("End Position:[" + diagnostic.getEndPosition() + "]\n");
-        res.append("Source:[" + diagnostic.getSource() + "]\n");
-        res.append("Message:[" + diagnostic.getMessage(null) + "]\n");
-        res.append("LineNumber:[" + diagnostic.getLineNumber() + "]\n");
-        res.append("ColumnNumber:[" + diagnostic.getColumnNumber() + "]\n");
-    }
-
-
-    private String getJavaName(File file) {
-        String fileName = file.getName();
-        int len = fileName.lastIndexOf(".");
-        return fileName.substring(0, len);
-    }
 }

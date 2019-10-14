@@ -18,24 +18,14 @@ public class CompilerHelper {
 
 
     public static DynamicCodeCompiler newJavaCompiler() {
-//        ClassLoader classLoader = getJavaCompilerClassLoader();
-//        if(Objects.isNull(classLoader)){
-//            return new JavaCompiler();
-//        }
-//        return new JavaCompiler(DynaicCompilerContext.createContext(new MemJavaFileObjectManager(), classLoader));
-        return new JavaArthasCompiler();
-    }
-
-
-    public static DynamicCodeCompiler storeJavaCompiler(File classpath) {
         ClassLoader classLoader = getJavaCompilerClassLoader();
         if(Objects.isNull(classLoader)){
-            return new JavaCompiler(DynaicCompilerContext.createContext(
-                    new StoreJavaFileObjectManager(classpath)));
+            return new JavaCompiler();
         }
-        return new JavaCompiler(DynaicCompilerContext.createContext(
-                new StoreJavaFileObjectManager(classpath), classLoader));
+        return new JavaCompiler(classLoader);
+//        return new JavaArthasCompiler();
     }
+
 
     public static DynamicCodeCompiler newGroovyCompiler(){
         return new GroovyCompiler();
