@@ -1,6 +1,5 @@
 package com.fm.compiler.dynamicbean;
 
-import com.fm.compiler.CompilerHelper;
 import com.fm.compiler.DynamicCompilerHelper;
 import com.fm.compiler.InstanceHelper;
 import com.fm.compiler.exceptions.InstanceCreateException;
@@ -8,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DefaultDynamicBeanManager implements DynamicBeanManager {
@@ -59,8 +59,12 @@ public class DefaultDynamicBeanManager implements DynamicBeanManager {
 
     private Class<?> compile(CompliteDefinition compliteDefinition) throws Exception {
 //        return CompilerHelper.newJavaCompiler().compile(compliteDefinition.getLanguage(), compliteDefinition.getName(), compliteDefinition.getCode());
-        return DynamicCompilerHelper.compile(
+        Class<?> cls = DynamicCompilerHelper.compile(
                 compliteDefinition.getLanguage(), compliteDefinition.getName(), compliteDefinition.getCode());
+        if(!Objects.isNull(cls)){
+            log.info("[dynamic compiler] {} 编译成功 -> {}", compliteDefinition.getName(), cls);
+        }
+        return cls;
     }
 
 }

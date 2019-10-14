@@ -2,10 +2,7 @@ package com.fm.compiler;
 
 import com.fm.compiler.dynamic.DynamicCodeCompiler;
 import com.fm.compiler.dynamic.groovy.GroovyCompiler;
-import com.fm.compiler.dynamic.java.DynaicCompilerContext;
-import com.fm.compiler.dynamic.java.JavaCompiler;
-import com.fm.compiler.dynamic.java.MemJavaFileObjectManager;
-import com.fm.compiler.dynamic.java.StoreJavaFileObjectManager;
+import com.fm.compiler.dynamic.java.*;
 import org.apache.commons.io.FileUtils;
 import org.codehaus.groovy.control.CompilerConfiguration;
 
@@ -21,12 +18,14 @@ public class CompilerHelper {
 
 
     public static DynamicCodeCompiler newJavaCompiler() {
-        ClassLoader classLoader = getJavaCompilerClassLoader();
-        if(Objects.isNull(classLoader)){
-            return new JavaCompiler();
-        }
-        return new JavaCompiler(DynaicCompilerContext.createContext(new MemJavaFileObjectManager(), classLoader));
+//        ClassLoader classLoader = getJavaCompilerClassLoader();
+//        if(Objects.isNull(classLoader)){
+//            return new JavaCompiler();
+//        }
+//        return new JavaCompiler(DynaicCompilerContext.createContext(new MemJavaFileObjectManager(), classLoader));
+        return new JavaArthasCompiler();
     }
+
 
     public static DynamicCodeCompiler storeJavaCompiler(File classpath) {
         ClassLoader classLoader = getJavaCompilerClassLoader();
