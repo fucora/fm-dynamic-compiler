@@ -1,9 +1,5 @@
 package com.fm.compiler.dynamic.java;
 
-import com.taobao.arthas.compiler.DynamicClassLoader;
-import com.taobao.arthas.compiler.DynamicCompilerException;
-import com.taobao.arthas.compiler.DynamicJavaFileManager;
-import com.taobao.arthas.compiler.StringSource;
 
 import javax.tools.JavaCompiler;
 import javax.tools.*;

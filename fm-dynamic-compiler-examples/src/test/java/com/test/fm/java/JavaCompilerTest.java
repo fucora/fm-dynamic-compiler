@@ -24,6 +24,7 @@ public class JavaCompilerTest {
         System.out.println("before....");
 //        javaFileObjectManager = new MemJavaFileObjectManager();
 //        javaCompiler = new JavaCompiler(DynaicCompilerContext.createContext(javaFileObjectManager));
+        javaCompiler = new JavaCompiler(Thread.currentThread().getContextClassLoader());
     }
 
 

@@ -1,7 +1,6 @@
 package com.fm.compiler.dynamic.java;
 
 import com.fm.compiler.dynamic.DynamicCodeCompiler;
-import com.taobao.arthas.compiler.DynamicCompiler;
 import java.io.File;
 import java.util.Map;
 
@@ -9,7 +8,7 @@ public class JavaCompiler implements DynamicCodeCompiler {
 
 
     private ClassLoader classLoader;
-    private com.taobao.arthas.compiler.DynamicCompiler dynamicCompiler;
+    private DynamicCompiler dynamicCompiler;
 
 
 

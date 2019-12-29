@@ -20,7 +20,6 @@ package com.fm.compiler.dynamic.java;
  * #L%
  */
 
-import com.taobao.arthas.compiler.CustomJavaFileObject;
 
 import javax.tools.JavaFileObject;
 import java.io.File;

@@ -20,7 +20,6 @@ package com.fm.compiler.dynamic.java;
  * #L%
  */
 
-import com.taobao.arthas.compiler.MemoryByteCode;
 
 import java.util.HashMap;
 import java.util.Map;
