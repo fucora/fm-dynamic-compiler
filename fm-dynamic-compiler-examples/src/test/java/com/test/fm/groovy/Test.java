@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class Test {
 
-    @org.junit.Test
+//    @org.junit.Test
     public void test() throws IOException, IllegalAccessException, InstantiationException {
         File file = new File("/Users/saleson/IdeaProjects/fm/huaice/data-trade-dynamic/src/test/java/com/test/fm/groovy/OApiTransformerTest.groovy");
         GroovyCompiler compiler = new GroovyCompiler();

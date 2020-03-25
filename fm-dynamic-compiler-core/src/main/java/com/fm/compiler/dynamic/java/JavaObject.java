@@ -59,8 +59,12 @@ public class JavaObject extends SimpleJavaFileObject {
 
         String className = file.toURI().getPath();
         className = className.replace(DIR_SEPARATOR, PKG_SEPARATOR);
-        className = className.substring(1, className.indexOf(CLASS_FILE_SUFFIX));
-        className = className.substring(1, className.indexOf(JAVA_FILE_SUFFIX));
+        if(className.endsWith(CLASS_FILE_SUFFIX)){
+            className = className.substring(1, className.indexOf(CLASS_FILE_SUFFIX));
+        }else if(className.endsWith(JAVA_FILE_SUFFIX)){
+            className = className.substring(1, className.indexOf(JAVA_FILE_SUFFIX));
+        }
+
         this.javaName = className;
     }
 

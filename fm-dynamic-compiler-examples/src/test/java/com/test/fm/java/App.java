@@ -65,49 +65,49 @@ public class App {
             throw new IllegalArgumentException("No such class name in " + code);
         }
 
-        cls = "Tes";
-
-//        JavaFileObject javaFileObject = new MyJavaFileObject(cls, code);
-        JavaFileObject javaFileObject = new MyJavaFileObject(
-                new File("/Users/chinadep/IdeaProjects/fm-dynamic-compiler/Tes.java"),
-                JavaFileObject.Kind.SOURCE);
-        Boolean result = compiler.getTask(null, javaFileManager, collector, options, null, Arrays.asList(javaFileObject)).call();
-
-        if(!result){
-            for (Diagnostic diagnostic : collector.getDiagnostics()) {
-                System.out.println(compilePrint(diagnostic));
-            }
-        }
-
-        ClassLoader classloader = new MyClassLoader();
-
-        Class<?> clazz = null;
-        try {
-            clazz = classloader.loadClass(cls);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        Method method = null;
-        try {
-            method = clazz.getMethod("hello");
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        try {
-            method.invoke(clazz.newInstance());
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        }
+//        cls = "Tes";
+//
+////        JavaFileObject javaFileObject = new MyJavaFileObject(cls, code);
+//        JavaFileObject javaFileObject = new MyJavaFileObject(
+//                new File("/Users/chinadep/IdeaProjects/fm-dynamic-compiler/Tes.java"),
+//                JavaFileObject.Kind.SOURCE);
+//        Boolean result = compiler.getTask(null, javaFileManager, collector, options, null, Arrays.asList(javaFileObject)).call();
+//
+//        if(!result){
+//            for (Diagnostic diagnostic : collector.getDiagnostics()) {
+//                System.out.println(compilePrint(diagnostic));
+//            }
+//        }
+//
+//        ClassLoader classloader = new MyClassLoader();
+//
+//        Class<?> clazz = null;
+//        try {
+//            clazz = classloader.loadClass(cls);
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//
+//        Method method = null;
+//        try {
+//            method = clazz.getMethod("hello");
+//        } catch (NoSuchMethodException e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            method.invoke(clazz.newInstance());
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        } catch (InvocationTargetException e) {
+//            e.printStackTrace();
+//        } catch (InstantiationException e) {
+//            e.printStackTrace();
+//        }
     }
 
 
 
-    @Test
+//    @Test
     public void teset2() throws IOException {
         MyJavaFileObject javaFileObject = new MyJavaFileObject(
                 new File("/Users/chinadep/IdeaProjects/fm-dynamic-compiler/Tes.class"),

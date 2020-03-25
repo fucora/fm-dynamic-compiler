@@ -16,11 +16,11 @@ import java.util.Map;
 public class JavaCompilerTest {
 
 
-    private static JavaCompiler javaCompiler;
+    private JavaCompiler javaCompiler;
 //    private static JavaFileObjectManager javaFileObjectManager;
 
-    @BeforeClass
-    public static void before() {
+    @Before
+    public void before() {
         System.out.println("before....");
 //        javaFileObjectManager = new MemJavaFileObjectManager();
 //        javaCompiler = new JavaCompiler(DynaicCompilerContext.createContext(javaFileObjectManager));
@@ -51,22 +51,45 @@ public class JavaCompilerTest {
         System.out.println("... end test1");
     }
 
-
     @Test
-    public void test2() throws Exception {
-        System.out.println("start test2...");
-        Class cls = javaCompiler.compile(new File("/Users/saleson/IdeaProjects/fm-dynamic-compiler/fm-dynamic-compiler-examples/src/test/resources/sources/java/Tes.java"));
+    public void test5() throws Exception {
+        System.out.println("start test1...");
+
+        String code = "import com.fm.data.trade.dynamic.OApiTransformer;\n" +
+                "public class OApiTransformerA extends OApiTransformer {\n" +
+                "\tpublic void hello(){\n" +
+                "\t\tSystem.out.println(sd());\n" +
+                "\t}\n" +
+                "\t@Override\n" +
+                "    public String sd() {\n" +
+                "\n" +
+                "        return \"ds\";\n" +
+                "    }\n" +
+                "}";
+        System.out.println(code);
+        Class cls = javaCompiler.compile(code, "OApiTransformerA");
         Object obj = cls.newInstance();
         Method method = cls.getMethod("hello");
         method.invoke(obj);
-
-        Method method2 =cls.getMethod("getTd", new Class[]{});
-        Object val = method2.invoke(obj);
-        System.out.println(val.getClass());
-        System.out.println("... end test2");
+        System.out.println("... end test1");
     }
 
-    @Test
+
+//    @Test
+//    public void test2() throws Exception {
+//        System.out.println("start test2...");
+//        Class cls = javaCompiler.compile(new File("/Users/saleson/IdeaProjects/fm-dynamic-compiler/fm-dynamic-compiler-examples/src/test/resources/sources/java/Tes.java"));
+//        Object obj = cls.newInstance();
+//        Method method = cls.getMethod("hello");
+//        method.invoke(obj);
+//
+//        Method method2 =cls.getMethod("getTd", new Class[]{});
+//        Object val = method2.invoke(obj);
+//        System.out.println(val.getClass());
+//        System.out.println("... end test2");
+//    }
+
+//    @Test
     public void test3() throws Exception {
         System.out.println("start test3...");
         Class cls = javaCompiler.compile(new File("/Users/saleson/IdeaProjects/fm-dynamic-compiler/Tes.class"));
